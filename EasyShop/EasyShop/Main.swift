@@ -1,0 +1,32 @@
+//
+//  Main.swift
+//  EasyShop
+//
+//  Created by Jorge Mayta on 10/09/25.
+//
+
+import SwiftUI
+
+struct Main: View {
+    var body: some View {
+        TabView {
+            Tab("Home", systemImage: "house") {
+                
+            }
+            Tab("Favorites", systemImage: "heart") {
+
+            }
+            Tab("Shopping", systemImage: "bag"){
+                
+            }
+            Tab("Profile", systemImage: "person") {
+                
+            }
+        }
+        .tint(.black)
+    }
+}
+
+#Preview {
+    Main()
+}
