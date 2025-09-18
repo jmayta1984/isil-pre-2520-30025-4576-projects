@@ -20,7 +20,7 @@ struct Home: View {
                     Image(systemName: "person.fill")
                         .font(.title)
                         .foregroundStyle(.background)
-                        
+                    
                 }
                 
                 VStack(alignment: .leading) {
@@ -30,11 +30,11 @@ struct Home: View {
                         .font(.headline)
                 }
                 Spacer()
-                RoundedIcon(name: "bell")
+                RoundedIcon(name: "bell"){}
                 
-                RoundedIcon(name: "bag")
+                RoundedIcon(name: "bag"){}
                 
-            }.padding()
+            }.padding(.horizontal)
             
             HStack {
                 HStack {
@@ -45,70 +45,87 @@ struct Home: View {
                 }.padding()
                     .background(.ultraThinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .shadow(radius: 4)
                 
-                RoundedIcon(name: "slider.vertical.3")
-            }.padding()
+                RoundedIcon(name: "slider.vertical.3"){}
+                
+            }.padding(.horizontal)
             
-            HStack {
-                Text("Categories")
-                    .font(.title)
-                    .bold()
-                
-                Spacer()
-                Button(action: {}) {
-                    Text("See all")
-                        .tint(.primary)
-                }
-                
-            }.padding()
-            
-            ScrollView(.horizontal){
+            ScrollView(.vertical) {
                 HStack {
-                    ForEach(categories, id: \.self) { category in
-                        CategoryChip(name: category)
+                    Text("Categories")
+                        .font(.title)
+                        .bold()
+                    
+                    Spacer()
+                    Button(action: {}) {
+                        Text("See all")
+                            .tint(.primary)
                     }
-                }.padding(EdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16))
+                    
+                }.padding()
+                
+                ScrollView(.horizontal){
+                    HStack {
+                        ForEach(categories, id: \.self) { category in
+                            CategoryChip(name: category)
+                        }
+                    }.padding(EdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16))
+                }.scrollIndicators(.hidden)
+                
+                HStack {
+                    VStack {
+                        Text("Get your special sale today!")
+                            .font(.title)
+                            .bold()
+                        
+                        Button(action: {}) {
+                            Text("Shop now")
+                                .tint(.white)
+                                .padding()
+                                .background(.black)
+                                .clipShape(RoundedRectangle(cornerRadius: 16))
+                        }
+                    }
+                    
+                    Image("banner")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 192)
+                }
+                .frame(maxWidth: .infinity)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+                .padding(.horizontal)
+                
+                HStack {
+                    Text("Products")
+                        .font(.title)
+                        .bold()
+                    
+                    Spacer()
+                    Button(action: {}) {
+                        Text("See all")
+                            .tint(.primary)
+                    }
+                    
+                }.padding()
+                
+                
+                LazyVGrid(columns: [
+                    GridItem(.flexible()),
+                    GridItem(.flexible())
+                ]) {
+                    ForEach(products, id: \.self.name) { product in
+                        ProductCard(product: product)
+                    }
+                }.padding(.horizontal)
             }.scrollIndicators(.hidden)
-          
-            HStack {
-                Text("Get your special sale today!")
-                    .font(.title)
-                    .bold()
-                Image("banner")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 192)
-            }
-            .frame(maxWidth: .infinity)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
-            .padding()
             
-            Spacer()
         }
     }
 }
 
 
-struct CategoryChip : View {
-    let name: String
-    var body: some View {
-        Text(name)
-            .font(.title2)
-            .padding(EdgeInsets(top: 16, leading: 32, bottom: 16, trailing: 32))
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
-    }
-}
-
-struct RoundedIcon: View {
-    let name: String
-    
-    var body: some View {
-        Image(systemName: name)
-            .font(.title2)
-            .frame(width: 48, height: 48)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
-    }
-}
 
 #Preview {
     Home()
