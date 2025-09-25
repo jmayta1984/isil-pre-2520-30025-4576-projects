@@ -11,6 +11,9 @@ struct Home: View {
     
     let categories = ["All", "Men", "Women", "Boys", "Girls"]
     
+    @State var selectedCategory = "All"
+    @State var selectedProduct: Product? = nil
+    
     var body: some View {
         VStack {
             HStack {
@@ -52,6 +55,10 @@ struct Home: View {
             }.padding(.horizontal)
             
             ScrollView(.vertical) {
+                
+                Banner()
+                .padding()
+                
                 HStack {
                     Text("Categories")
                         .font(.title)
@@ -63,39 +70,23 @@ struct Home: View {
                             .tint(.primary)
                     }
                     
-                }.padding()
+                }.padding(.horizontal)
                 
                 ScrollView(.horizontal){
                     HStack {
                         ForEach(categories, id: \.self) { category in
-                            CategoryChip(name: category)
+                            CategoryChip(
+                                name: category,
+                                selected: selectedCategory == category
+                            )
+                            .onTapGesture {
+                                selectedCategory = category
+                            }
                         }
                     }.padding(EdgeInsets(top: 0, leading: 16, bottom: 16, trailing: 16))
                 }.scrollIndicators(.hidden)
                 
-                HStack {
-                    VStack {
-                        Text("Get your special sale today!")
-                            .font(.title)
-                            .bold()
-                        
-                        Button(action: {}) {
-                            Text("Shop now")
-                                .tint(.white)
-                                .padding()
-                                .background(.black)
-                                .clipShape(RoundedRectangle(cornerRadius: 16))
-                        }
-                    }
-                    
-                    Image("banner")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 192)
-                }
-                .frame(maxWidth: .infinity)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
-                .padding(.horizontal)
+                
                 
                 HStack {
                     Text("Products")
@@ -117,10 +108,16 @@ struct Home: View {
                 ]) {
                     ForEach(products, id: \.self.name) { product in
                         ProductCard(product: product)
+                            .onTapGesture {
+                                selectedProduct = product
+                            }
                     }
                 }.padding(.horizontal)
             }.scrollIndicators(.hidden)
             
+        }
+        .navigationDestination(item: $selectedProduct) { product in
+            ProductDetail(product: product)
         }
     }
 }

@@ -17,12 +17,13 @@ struct Main: View {
 
             }
             Tab("Shopping", systemImage: "bag"){
-                
+                Cart()
             }
             Tab("Profile", systemImage: "person") {
                 
             }
         }
+        .navigationBarBackButtonHidden()
         .tint(.black)
     }
 }
