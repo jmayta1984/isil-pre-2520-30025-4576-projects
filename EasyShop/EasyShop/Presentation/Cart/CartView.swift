@@ -31,9 +31,7 @@ struct CartView: View {
                                    }
                     
                 }
-                .onDelete { _ in
-                    
-                }
+
                 .listRowSeparator(.hidden)
                 
             }
