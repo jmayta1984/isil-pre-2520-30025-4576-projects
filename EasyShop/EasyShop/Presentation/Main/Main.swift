@@ -9,48 +9,24 @@ import SwiftUI
 
 struct Main: View {
     @EnvironmentObject var router: AppRouter
-
+    
     var body: some View {
         TabView (selection: $router.selectedTab) {
             
-            Home()
-                .tabItem {
-                    Label("Home", systemImage: "house")
-                }
-                .tag(0)
+            Tab("Home", systemImage: "house", value: 0) {
+                Home()
+            }
             
-            Text("Favorites")
-                .tabItem {
-                    Label("Favorites", systemImage: "heart")
-                }
-                .tag(1)
+            Tab("Favorites", systemImage: "heart", value: 1) {
+                
+            }
+            Tab("Shopping", systemImage: "bag", value: 2){
+                CartView()
+            }
+            Tab("Profile", systemImage: "person", value: 3) {
+                
+            }
             
-            CartView()
-                .tabItem {
-                    Label("Shopping", systemImage: "bag")
-                }
-                .tag(2)
-            
-            Text("Profile")
-                .tabItem {
-                    Label("Profile", systemImage: "person")
-                }
-                .tag(3)
-            /*
-             Tab("Home", systemImage: "house") {
-                 Home()
-             }
-             
-             Tab("Favorites", systemImage: "heart") {
-
-             }
-             Tab("Shopping", systemImage: "bag"){
-                 CartView()
-             }
-             Tab("Profile", systemImage: "person") {
-                 
-             }
-             */
         }
         .navigationBarBackButtonHidden()
         .tint(.black)
