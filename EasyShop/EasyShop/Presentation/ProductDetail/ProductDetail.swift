@@ -12,7 +12,9 @@ struct ProductDetail: View {
     @StateObject var viewModel = ProductDetailViewModel()
     @EnvironmentObject var cartViewModel: CartViewModel
     @State var showConfirmation = false
-    
+    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var router: AppRouter
+
     let product: Product
     
     var body: some View {
@@ -106,7 +108,12 @@ struct ProductDetail: View {
             }.padding()
         }
         .sheet(isPresented: $showConfirmation) {
-            CartItemConfirmation(product: product, quantity: viewModel.quantity)
+            CartItemConfirmation(product: product, quantity: viewModel.quantity) {
+                showConfirmation.toggle()
+                dismiss()
+                router.selectedTab = 2
+                
+            }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(.white)
                 .presentationDetents([.fraction(0.35)])
@@ -123,10 +130,10 @@ struct ProductDetail: View {
 
 
 struct CartItemConfirmation: View {
-    @EnvironmentObject var router: AppRouter
-
     let product: Product
     let quantity: Int
+    let action: () -> Void
+
     var body: some View {
         VStack (alignment: .leading){
             Text("ADDED TO CART")
@@ -160,10 +167,7 @@ struct CartItemConfirmation: View {
             .padding(.horizontal)
             
             
-            Button(action: {
-                router.selectedTab = 2
-                
-            }) {
+            Button(action: action) {
                 Text("View cart")
                     .frame(maxWidth: .infinity)
                     .tint(.white)
