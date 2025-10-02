@@ -1,5 +1,5 @@
 //
-//  Cart.swift
+//  CartView.swift
 //  EasyShop
 //
 //  Created by Jorge Mayta on 24/09/25.
@@ -7,26 +7,24 @@
 
 import SwiftUI
 
-struct Cart: View {
+struct CartView: View {
     
-   @State var cartItems: [CartItem] = [
-        CartItem(product: products[0], quantity: 5),
-        CartItem(product: products[1], quantity: 3),
-        CartItem(product: products[2], quantity: 10)
-    ]
+    @EnvironmentObject var viewModel: CartViewModel
     
     var body: some View {
         ZStack (alignment:.bottom){
             List {
-                ForEach(cartItems, id:\.self.product.name) { item in
+                ForEach(viewModel.cartItems, id:\.self.product.name) { item in
                     CartItemCard(item: item)
                         .listRowInsets(.init())
                         .listRowBackground(Color.clear)
                         .swipeActions(edge: .trailing) {
                                        Button(role: .destructive) {
+                                           /*
                                            if let index = cartItems.firstIndex(where: { $0.product.name == item.product.name }) {
                                                cartItems.remove(at: index)
                                            }
+                                            */
                                        } label: {
                                            Label("Remove", systemImage: "trash")
                                        }
@@ -47,7 +45,7 @@ struct Cart: View {
                     Text("Total")
                         .font(.headline)
                     Spacer()
-                    Text("$ \(cartItems.reduce(0) { $0 + ($1.product.price * Double($1.quantity)) }, specifier: "%.2f")")
+                    Text("$ \(viewModel.cartItems.reduce(0) { $0 + ($1.product.price * Double($1.quantity)) }, specifier: "%.2f")")
                         .font(.headline)
                 }
                 .padding(.top)
@@ -75,5 +73,6 @@ struct Cart: View {
 
 
 #Preview {
-    Cart()
+    CartView()
+        .environmentObject(CartViewModel())
 }

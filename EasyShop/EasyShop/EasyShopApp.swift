@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct EasyShopApp: App {
+    @StateObject var cartViewModel = CartViewModel()
     var body: some Scene {
         WindowGroup {
-            Login()
+            OnBoarding()
+                .environmentObject(cartViewModel)
         }
     }
 }

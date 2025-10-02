@@ -10,6 +10,7 @@ import SwiftUI
 struct ProductDetail: View {
     
     @StateObject var viewModel = ProductDetailViewModel()
+    @EnvironmentObject var cartViewModel: CartViewModel
     
     let product: Product
         
@@ -75,7 +76,9 @@ struct ProductDetail: View {
                 
             }
             HStack{
-                Button(action: {}) {
+                Button(action: {
+                    cartViewModel.addCartItem(product: product, quantity: viewModel.quantity)
+                }) {
                     Text("Add to cart")
                         .frame(maxWidth: .infinity)
                         .tint(.primary)
