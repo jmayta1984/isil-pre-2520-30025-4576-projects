@@ -37,9 +37,7 @@ struct CartItemCard: View {
             }
             Spacer()
         }
-        .frame(maxWidth: .infinity)
         .padding()
         .background(.gray.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }

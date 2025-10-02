@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Cart: View {
     
-    var cartItems: [CartItem] = [
+   @State var cartItems: [CartItem] = [
         CartItem(product: products[0], quantity: 5),
         CartItem(product: products[1], quantity: 3),
         CartItem(product: products[2], quantity: 10)
@@ -20,13 +20,27 @@ struct Cart: View {
             List {
                 ForEach(cartItems, id:\.self.product.name) { item in
                     CartItemCard(item: item)
+                        .listRowInsets(.init())
+                        .listRowBackground(Color.clear)
+                        .swipeActions(edge: .trailing) {
+                                       Button(role: .destructive) {
+                                           if let index = cartItems.firstIndex(where: { $0.product.name == item.product.name }) {
+                                               cartItems.remove(at: index)
+                                           }
+                                       } label: {
+                                           Label("Remove", systemImage: "trash")
+                                       }
+                                   }
                     
                 }
-                .onDelete { _ in 
+                .onDelete { _ in
                     
                 }
                 .listRowSeparator(.hidden)
-            }.listStyle(.plain)
+                
+            }
+            .listStyle(.plain)
+            .listRowSpacing(10)
             
             VStack{
                 HStack {
