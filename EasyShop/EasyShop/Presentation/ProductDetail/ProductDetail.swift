@@ -110,4 +110,5 @@ struct ProductDetail: View {
 
 #Preview {
     ProductDetail(product: products[1])
+        .environmentObject(CartViewModel())
 }
