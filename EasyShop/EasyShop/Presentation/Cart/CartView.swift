@@ -20,11 +20,7 @@ struct CartView: View {
                         .listRowBackground(Color.clear)
                         .swipeActions(edge: .trailing) {
                                        Button(role: .destructive) {
-                                           /*
-                                           if let index = cartItems.firstIndex(where: { $0.product.name == item.product.name }) {
-                                               cartItems.remove(at: index)
-                                           }
-                                            */
+                                           viewModel.removeCartItem(product: item.product)
                                        } label: {
                                            Label("Remove", systemImage: "trash")
                                        }

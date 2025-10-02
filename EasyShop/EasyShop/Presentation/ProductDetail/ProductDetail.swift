@@ -11,9 +11,10 @@ struct ProductDetail: View {
     
     @StateObject var viewModel = ProductDetailViewModel()
     @EnvironmentObject var cartViewModel: CartViewModel
+    @State var showConfirmation = false
     
     let product: Product
-        
+    
     var body: some View {
         ZStack(alignment:.bottom) {
             ScrollView(.vertical) {
@@ -50,13 +51,13 @@ struct ProductDetail: View {
                         RoundedIcon(name: "minus") {
                             viewModel.decreaseQuantity()
                         }
-                            
+                        
                         Text("\(viewModel.quantity)")
                             .frame(width: 24)
                         RoundedIcon(name: "plus") {
                             viewModel.increaseQuantity()
                         }
-                            
+                        
                     }.padding(.horizontal)
                     
                     HStack {
@@ -78,6 +79,7 @@ struct ProductDetail: View {
             HStack{
                 Button(action: {
                     cartViewModel.addCartItem(product: product, quantity: viewModel.quantity)
+                    showConfirmation.toggle()
                 }) {
                     Text("Add to cart")
                         .frame(maxWidth: .infinity)
@@ -99,9 +101,15 @@ struct ProductDetail: View {
                         .padding()
                         .background(.black)
                         .clipShape(RoundedRectangle(cornerRadius: 16))
-                        
+                    
                 }
             }.padding()
+        }
+        .sheet(isPresented: $showConfirmation) {
+            CartItemConfirmation(product: product, quantity: viewModel.quantity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(.white)
+                .presentationDetents([.fraction(0.35)])
         }
         
     }
@@ -112,3 +120,61 @@ struct ProductDetail: View {
     ProductDetail(product: products[1])
         .environmentObject(CartViewModel())
 }
+
+
+struct CartItemConfirmation: View {
+    @EnvironmentObject var router: AppRouter
+
+    let product: Product
+    let quantity: Int
+    var body: some View {
+        VStack (alignment: .leading){
+            Text("ADDED TO CART")
+                .font(.largeTitle)
+                .bold()
+                .padding(.horizontal)
+            
+            HStack {
+                AsyncImage(
+                    url: URL(string: product.image),
+                    content: { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 96, height: 96)
+                    },
+                    placeholder: {
+                        ProgressView()
+                            .frame(width: 96, height: 96)
+                    }
+                )
+                VStack (alignment: .leading) {
+                    Text("$ \(product.price, specifier: "%.2f")")
+                        .font(.headline)
+                        .background(.background)
+                    Text(product.name)
+                        .bold()
+                    Text("Quantity: \(quantity)")
+                }
+            }
+            .padding(.horizontal)
+            
+            
+            Button(action: {
+                router.selectedTab = 2
+                
+            }) {
+                Text("View cart")
+                    .frame(maxWidth: .infinity)
+                    .tint(.white)
+                    .padding()
+                    .foregroundStyle(.white)
+                    .background(.black)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .padding(.horizontal)
+            }
+            
+        }
+    }
+}
+

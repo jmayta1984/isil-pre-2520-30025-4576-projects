@@ -10,10 +10,13 @@ import SwiftUI
 @main
 struct EasyShopApp: App {
     @StateObject var cartViewModel = CartViewModel()
+    @StateObject var router = AppRouter()
+
     var body: some Scene {
         WindowGroup {
             OnBoarding()
                 .environmentObject(cartViewModel)
+                .environmentObject(router)
         }
     }
 }
