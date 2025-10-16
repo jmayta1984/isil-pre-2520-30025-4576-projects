@@ -18,7 +18,7 @@ struct ProductDetail: View {
     let product: Product
     
     var body: some View {
-        ZStack(alignment:.bottom) {
+        VStack {
             ScrollView(.vertical) {
                 VStack {
                     AsyncImage(
@@ -77,6 +77,7 @@ struct ProductDetail: View {
                     
                 }
                 
+                
             }
             HStack{
                 Button(action: {
@@ -105,7 +106,7 @@ struct ProductDetail: View {
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                     
                 }
-            }.padding()
+            }.padding(.horizontal)
         }
         .sheet(isPresented: $showConfirmation) {
             CartItemConfirmation(product: product, quantity: viewModel.quantity) {
@@ -126,59 +127,5 @@ struct ProductDetail: View {
 #Preview {
     ProductDetail(product: products[1])
         .environmentObject(CartViewModel())
-}
-
-
-struct CartItemConfirmation: View {
-    let product: Product
-    let quantity: Int
-    let action: () -> Void
-
-    var body: some View {
-        VStack (alignment: .leading){
-            Text("ADDED TO CART")
-                .font(.largeTitle)
-                .bold()
-                .padding(.horizontal)
-            
-            HStack {
-                AsyncImage(
-                    url: URL(string: product.image),
-                    content: { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 96, height: 96)
-                    },
-                    placeholder: {
-                        ProgressView()
-                            .frame(width: 96, height: 96)
-                    }
-                )
-                VStack (alignment: .leading) {
-                    Text("$ \(product.price, specifier: "%.2f")")
-                        .font(.headline)
-                        .background(.background)
-                    Text(product.name)
-                        .bold()
-                    Text("Quantity: \(quantity)")
-                }
-            }
-            .padding(.horizontal)
-            
-            
-            Button(action: action) {
-                Text("View cart")
-                    .frame(maxWidth: .infinity)
-                    .tint(.white)
-                    .padding()
-                    .foregroundStyle(.white)
-                    .background(.black)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .padding(.horizontal)
-            }
-            
-        }
-    }
 }
 
