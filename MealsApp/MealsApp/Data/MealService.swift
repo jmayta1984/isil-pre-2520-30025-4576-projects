@@ -1,5 +1,5 @@
 //
-//  CategoryService.swift
+//  MealService.swift
 //  MealsApp
 //
 //  Created by Jorge Mayta on 15/10/25.
@@ -7,15 +7,16 @@
 
 import Foundation
 
-class CategoryService {
+class MealService {
     
-    static let shared = CategoryService()
+    static let shared = MealService()
     
     private init() {}
     
-    func getCategories(completion: @escaping ([Category]?, String?) -> Void) {
+    func getMealsByCategory(category: String,
+                            completion: @escaping ([Meal]?, String?) -> Void) {
         
-        let endpoint = "https://www.themealdb.com/api/json/v1/1/categories.php"
+        let endpoint = "https://www.themealdb.com/api/json/v1/1/filter.php?c=\(category)"
         
         guard let url = URL(string: endpoint) else {
             completion(nil, "Error: cannot create URL")
@@ -24,6 +25,7 @@ class CategoryService {
         
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
+    
         
         let session = URLSession.shared
         
@@ -43,12 +45,12 @@ class CategoryService {
                 return }
             
             do {
-                let wrapperDto = try JSONDecoder().decode(CategoriesWrapperDto.self, from: data)
+                let wrapperDto = try JSONDecoder().decode(MealsWrapperDto.self, from: data)
                 
-                let categories = wrapperDto.categories.map { categoryDto in
-                    Category(id: categoryDto.id, name: categoryDto.name, posterPath: categoryDto.posterPath, overview: categoryDto.overview)
+                let meals = wrapperDto.meals.map { mealDto in
+                    Meal(id: mealDto.id, name: mealDto.name, posterPath: mealDto.posterPath)
                 }
-                completion(categories, nil)
+                completion(meals, nil)
             } catch let error {
                 completion(nil, "Error: \(error.localizedDescription)")
             }

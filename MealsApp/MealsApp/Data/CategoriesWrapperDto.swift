@@ -17,10 +17,12 @@ struct CategoryDto: Decodable {
     let id: String
     let name: String
     let posterPath: String
+    let overview: String
     
     enum CodingKeys: String, CodingKey {
         case id = "idCategory"
         case name = "strCategory"
         case posterPath = "strCategoryThumb"
+        case overview = "strCategoryDescription"
     }
 }
