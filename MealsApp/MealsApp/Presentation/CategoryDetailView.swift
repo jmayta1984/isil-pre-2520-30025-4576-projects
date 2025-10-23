@@ -16,14 +16,14 @@ struct CategoryDetailView: View {
             Section {
                 VStack (alignment: .leading, spacing: 8){
                     CategoryImage(poster: category.posterPath)
-
+                    
                     Text("Description")
                         .font(.title3)
                         .bold()
                     
                     Text(category.overview)
                         .font(Font.subheadline)
-
+                    
                 }
                 .padding()
                 .background(.ultraThinMaterial)
@@ -33,12 +33,12 @@ struct CategoryDetailView: View {
             .listSectionSeparator(.hidden)
             Section {
                 ForEach(viewModel.meals) { meal in
-                    Text(meal.name).padding(.horizontal)
+                    MealCard(meal: meal).padding(.horizontal, 8)
                 }
                 .listRowSeparator(.hidden)
             }
             .listSectionSeparator(.hidden)
-
+            
             
         }
         .listStyle(.plain)
@@ -47,5 +47,37 @@ struct CategoryDetailView: View {
             viewModel.getMealsByCategory(category: category.name)
         }
         
+    }
+}
+
+struct MealCard: View {
+    let meal: Meal
+    var body: some View {
+        HStack {
+            MealImage(posterPath: meal.posterPath)
+            Text(meal.name)
+        }
+    }
+}
+
+struct MealImage: View {
+    let posterPath: String
+    var body: some View {
+        AsyncImage(url: URL(string: posterPath)) { phase in
+            switch phase {
+            case .success(let image):
+                image
+                    .resizable()
+                    .scaledToFit()
+            case .failure:
+                EmptyView()
+            case .empty:
+                ProgressView()
+            @unknown default:
+                EmptyView()
+            }
+        }
+        .frame(width: 64, height: 64)
+        .clipShape(Circle())
     }
 }

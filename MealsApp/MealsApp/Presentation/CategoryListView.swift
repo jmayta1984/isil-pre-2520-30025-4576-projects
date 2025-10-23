@@ -33,46 +33,9 @@ struct CategoryListView: View {
     }
 }
 
-struct CategoryCard: View {
-    let category: Category
-    var body: some View {
-        
-        VStack {
-            CategoryImage(poster: category.posterPath)
-            
-            Text(category.name)
-                .font(.title3)
-                .bold()
-                .padding(.vertical,16)
-                .frame(maxWidth: .infinity)
-                .foregroundStyle(.white)
-                .background(.black)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-        }
-        .padding(.top)
-        .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-    }
-    
-}
 
-struct CategoryImage: View {
-    let poster: String
-    var body: some View {
-        AsyncImage(
-            url: URL(string: poster)) { image in
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 200)
-            } placeholder: {
-                ProgressView()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 200)
-            }
-    }
-}
+
+
 
 #Preview {
     CategoryListView()
