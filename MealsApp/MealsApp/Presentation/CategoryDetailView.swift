@@ -12,30 +12,36 @@ struct CategoryDetailView: View {
     @State var viewModel = CategoryDetailViewModel()
     
     var body: some View {
-        VStack {
-            CategoryImage(poster: category.posterPath)
-            
-            
-            VStack (alignment: .leading, spacing: 8){
-                
-                Text("Description")
-                    .font(.title3)
-                    .bold()
-                   
-                Text(category.overview)
+        List {
+            Section {
+                VStack (alignment: .leading, spacing: 8){
+                    CategoryImage(poster: category.posterPath)
+
+                    Text("Description")
+                        .font(.title3)
+                        .bold()
                     
-            }
-            .padding()
-            .font(Font.subheadline)
-            .background(.ultraThinMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            
-            List {
-                ForEach(viewModel.meals) { meal in
-                    Text(meal.name)
+                    Text(category.overview)
+                        .font(Font.subheadline)
+
                 }
-            }.listStyle(.plain)
+                .padding()
+                .background(.ultraThinMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                
+            }
+            .listSectionSeparator(.hidden)
+            Section {
+                ForEach(viewModel.meals) { meal in
+                    Text(meal.name).padding(.horizontal)
+                }
+                .listRowSeparator(.hidden)
+            }
+            .listSectionSeparator(.hidden)
+
+            
         }
+        .listStyle(.plain)
         .navigationTitle(category.name)
         .onAppear {
             viewModel.getMealsByCategory(category: category.name)
