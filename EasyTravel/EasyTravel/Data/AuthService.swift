@@ -65,11 +65,11 @@ class AuthService {
         task.resume()
     }
     
-    func login(requestBody: LoginRequestDto, completion: @escaping (Bool, String) -> Void) {
+    func login(requestBody: LoginRequestDto, completion: @escaping (User?, String) -> Void) {
         let endpoint = "https://travelapi-1071627934947.us-central1.run.app/api/users/login"
         
         guard let url = URL(string: endpoint) else {
-            completion(false, "Error: cannot create URL")
+            completion(nil, "Error: cannot create URL")
             return
         }
         
@@ -81,7 +81,7 @@ class AuthService {
             let body = try JSONEncoder().encode(requestBody)
             urlRequest.httpBody = body
         } catch let encodingError {
-            completion(false, "Error: \(encodingError.localizedDescription)")
+            completion(nil, "Error: \(encodingError.localizedDescription)")
             return
         }
         
@@ -90,28 +90,28 @@ class AuthService {
         let task = session.dataTask(with: urlRequest) { data, response, error in
             
             if let error  = error  {
-                completion(false, "Error: \(error.localizedDescription)")
+                completion(nil, "Error: \(error.localizedDescription)")
                 return
             }
             
             guard let data = data else {
-                completion(false, "Error: no data returned from request")
+                completion(nil, "Error: no data returned from request")
                 return
             }
             
             guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                completion(false, "Error: invalid response from server")
+                completion(nil, "Error: invalid response from server")
                 return
             }
             
             
             do {
                 let responseDto = try JSONDecoder().decode(LoginResponseDto.self, from: data)
-                completion(true, "\(responseDto.firstName) \(responseDto.lastName)")
+                let user = User(firstName: responseDto.firstName, lastName: responseDto.lastName, email: responseDto.email, token: responseDto.token)
+                completion(user, "Welcome \(responseDto.firstName) \(responseDto.lastName)")
             } catch let jsonError {
-                completion(false, "Error: \(jsonError.localizedDescription)")
+                completion(nil, "Error: \(jsonError.localizedDescription)")
             }
-            
         }
         
         task.resume()

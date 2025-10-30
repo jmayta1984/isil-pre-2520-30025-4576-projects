@@ -11,7 +11,7 @@ import SwiftUI
 struct EasyTravelApp: App {
     var body: some Scene {
         WindowGroup {
-            RegisterView()
+            LoginView()
         }
     }
 }

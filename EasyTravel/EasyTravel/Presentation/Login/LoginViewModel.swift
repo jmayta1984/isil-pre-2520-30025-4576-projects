@@ -14,6 +14,7 @@ class LoginViewModel: ObservableObject {
     @Published var password = ""
     
     @Published var message = ""
+    @Published var user: User?
     
     func login() {
         let service = AuthService.shared
@@ -21,9 +22,10 @@ class LoginViewModel: ObservableObject {
         service.login(
             requestBody: LoginRequestDto(
                 email: email,
-                password: password)) { success, message in
+                password: password)) { user, message in
                     DispatchQueue.main.async {
                         self.message = message
+                        self.user = user
                     }
                 }
     }
