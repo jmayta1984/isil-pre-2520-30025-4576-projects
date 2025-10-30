@@ -13,9 +13,10 @@ class DestinationService {
     
     
     func getDestinations(
+        query: String = "",
         completion: @escaping ([Destination]?, String?) -> Void
     ) {
-        let endpoint = "https://travelapi-1071627934947.us-central1.run.app/api/destinations"
+        let endpoint = "https://travelapi-1071627934947.us-central1.run.app/api/destinations?type=\(query)"
         
         guard let url = URL(string: endpoint) else {
             completion(nil, "Error: cannot create URL")

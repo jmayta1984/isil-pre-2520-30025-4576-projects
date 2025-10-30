@@ -10,19 +10,26 @@ import Combine
 
 class DestinationListViewModel: ObservableObject {
     
-    @Published var destinations: [Destination] = []
+    @Published var category = "All"
+    @Published var state: DestinationListState = .idle
     
     func getDestinations() {
+        state = .loading
         let destinationService = DestinationService.shared
         
-        destinationService.getDestinations { destinations, message in
+        let query = category == "All" ? "": category
+        destinationService.getDestinations(query: query) { destinations, message in
             if let destinations = destinations {
                 DispatchQueue.main.async {
-                    self.destinations = destinations
+                    self.state = .success(destinations)
                 }
             }
-            print(message ?? "Unknown error")
         }
+    }
+    
+    func onCategoryChange(category: String) {
+        self.category = category
+        getDestinations()
     }
     
     init() {
