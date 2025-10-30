@@ -11,6 +11,7 @@ import SwiftUI
 struct RegisterView: View {
 
     @StateObject var viewModel = RegisterViewModel()
+    @State private var isPasswordVisible = false
     
     var body: some View {
         VStack (spacing: 16){
@@ -18,6 +19,7 @@ struct RegisterView: View {
             TextField("First name", text: $viewModel.firstName)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
+                .frame(height: 24)
                 .padding()
                 .background(.ultraThinMaterial)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -26,6 +28,7 @@ struct RegisterView: View {
             TextField("Last name", text: $viewModel.lastName)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
+                .frame(height: 24)
                 .padding()
                 .background(.ultraThinMaterial)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -34,18 +37,36 @@ struct RegisterView: View {
             TextField("Email", text: $viewModel.email)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
+                .keyboardType(.emailAddress)
+                .frame(height: 24)
                 .padding()
                 .background(.ultraThinMaterial)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
                 .padding(.horizontal)
             
-            TextField("Password", text: $viewModel.password)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
-                .padding()
-                .background(.ultraThinMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .padding(.horizontal)
+            HStack {
+                Group {
+                    if isPasswordVisible {
+                        TextField("Password", text: $viewModel.password)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                    } else {
+                        SecureField("Password", text: $viewModel.password)
+                    }
+                }
+                Button {
+                    isPasswordVisible.toggle()
+                } label: {
+                    Image(systemName: isPasswordVisible ? "eye": "eye.slash")
+                }
+                .tint(Color(uiColor: .label))
+            }
+            .frame(height: 24)
+            .padding()
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .padding(.horizontal)
+                
             
             Button {
                 viewModel.register()
