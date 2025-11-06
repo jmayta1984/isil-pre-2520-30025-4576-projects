@@ -10,12 +10,24 @@ import SwiftUI
 struct TaskListView: View {
     @StateObject var viewModel = TaskListViewModel()
     @State var showAddTask: Bool = false
+    @State var selectedTask: Task? = nil
     
     var body: some View {
         NavigationStack {
             List {
-                ForEach(viewModel.tasks, id: \.self.id) { task in
+                ForEach(viewModel.tasks) { task in
                     Text(task.name)
+                        .onTapGesture {
+                            selectedTask = task
+                        }
+                        .swipeActions {
+                            Button(role: .destructive) {
+                                viewModel.deleteTask(task: task)
+                            } label: {
+                                Label("Remove", systemImage: "trash")
+                            }
+
+                        }
                 }
             }
             .navigationTitle("Tasks")
@@ -32,9 +44,18 @@ struct TaskListView: View {
             .sheet(isPresented: $showAddTask) {
                 TaskDetailView {
                     showAddTask.toggle()
-                } save: { name in
+                } save: { task in
                     showAddTask.toggle()
-                    viewModel.addTask(name: name)
+                    viewModel.addTask(task: task)
+                }
+
+            }
+            .sheet(item: $selectedTask) { task in
+                TaskDetailView(task: task) {
+                    selectedTask = nil
+                } save: { task in
+                    selectedTask = nil
+                    viewModel.updateTask(task: task)
                 }
 
             }

@@ -12,17 +12,23 @@ class TaskListViewModel: ObservableObject {
     @Published var tasks: [Task] = []
     let dao = TaskDao.shared
     
-    func addTask(name: String) {
-        let task = Task(id: UUID(), name: name)
+    func addTask(task: Task) {
+        tasks.append(task)
         dao.insert(task: task)
     }
     
-    func deleteTask() {
-        
+    func deleteTask(task: Task) {
+        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
+            tasks.remove(at: index)
+            dao.delete(task: task)
+        }
     }
     
-    func updateTask() {
-        
+    func updateTask(task: Task) {
+        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
+            tasks[index] = task
+            dao.update(task: task)
+        }
     }
     
     func getAllTasks() {

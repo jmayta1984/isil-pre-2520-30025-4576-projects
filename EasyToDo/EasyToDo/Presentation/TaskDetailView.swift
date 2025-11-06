@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct TaskDetailView: View {
-    let cancel: () -> Void
-    let save: (String) -> Void
-    
     @State var name = ""
+
+    var task: Task?
+    let cancel: () -> Void
+    let save: (Task) -> Void
+    
     
     var body: some View {
         NavigationStack {
@@ -22,7 +24,7 @@ struct TaskDetailView: View {
                         .autocorrectionDisabled()
                 }
             }
-            .navigationTitle(Text("New task"))
+            .navigationTitle(Text(task == nil ? "New task" : "Edit task" ))
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button(action: cancel) {
@@ -32,10 +34,15 @@ struct TaskDetailView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
-                        save(name)
+                        save(Task(id: task?.id ?? UUID(), name: name))
                     }) {
                         Image(systemName: "checkmark")
                     }
+                }
+            }
+            .onAppear {
+                if let task = task {
+                    self.name = task.name
                 }
             }
         }
