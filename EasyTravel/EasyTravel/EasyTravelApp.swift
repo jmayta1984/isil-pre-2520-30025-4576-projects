@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct EasyTravelApp: App {
     var body: some Scene {
         WindowGroup {
             LoginView()
+                .environmentObject(DestinationListViewModel())
         }
     }
 }
