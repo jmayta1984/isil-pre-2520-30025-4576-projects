@@ -13,16 +13,26 @@ class ProductListViewModel: ObservableObject {
     let repository: ProductRepository = ProductRepositoryImpl.shared
     
     func getAllProducts(){
-        uiState = UiState(status: .loading, products: uiState.products, message: uiState.message)
+        uiState = uiState.copy(status: .loading)
         
         repository.getAllProducts { result in
             switch result {
             case .success(let products):
-                self.uiState = UiState(status: .success, products: products, message: nil)
+                self.uiState = self.uiState.copy(status: .success, products: products)
             case .failure(let error):
-                self.uiState = UiState(status: .failure, products: [], message: error.localizedDescription)
+                self.uiState = self.uiState.copy(status: .failure, message: error.localizedDescription)
             }
         }
         
+    }
+    
+    func toggleFavorite(product: Product)  {
+        repository.toggleFavorite(product: product)
+        
+        
+        let products = uiState.products.map { item in
+            item.id == product.id ? product.copy(isFavorite: !item.isFavorite) : item
+        }
+        uiState = uiState.copy(products: products)
     }
 }

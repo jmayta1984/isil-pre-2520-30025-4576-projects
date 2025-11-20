@@ -27,6 +27,8 @@ extension ProductDto {
                 title: title,
                 description: description,
                 image: image,
-                price: price)
+                price: price,
+                isFavorite: false
+        )
     }
 }

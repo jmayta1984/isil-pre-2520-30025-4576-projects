@@ -7,4 +7,6 @@
 
 protocol ProductRepository {
     func getAllProducts(completion: @escaping (Result<[Product], ApiError>) -> Void)
+    
+    func toggleFavorite(product: Product)
 }

@@ -9,19 +9,21 @@ import SwiftUI
 
 struct ProductCard: View {
     let product: Product
+    let toggleFavorite: () -> Void
     var body: some View {
         
         VStack {
             HStack {
                 Spacer()
                 Button {
-                    
+                    toggleFavorite()
                 } label: {
-                    Image(systemName: "heart")
-                        .tint(Color(uiColor: .label))
-                        .font(.title2)
+                    Image(systemName:
+                            product.isFavorite ? "heart.fill" : "heart")
+                    .tint(Color(uiColor: .label))
+                    .font(.title2)
                 }
-
+                
             }
             
             AsyncImage(url: URL(string: product.image)) { phase in

@@ -17,15 +17,24 @@ class UiState {
     let products: [Product]
     let message: String?
     
-    init() {
-        self.status = .initial
-        self.products = []
-        self.message = nil
+    func copy(
+        status: Status? = nil,
+        products: [Product]? = nil,
+        message: String? = nil
+    ) -> UiState {
+        return UiState(
+            status: status ?? self.status,
+            products: products ?? self.products,
+            message: message ?? self.message
+        )
     }
     
-    init(status: Status, products: [Product], message: String? = nil) {
-        self.status = status
-        self.products = products
-        self.message = message
-    }
+    init(
+        status: Status = .initial,
+        products: [Product] = [],
+        message: String? = nil) {
+            self.status = status
+            self.products = products
+            self.message = message
+        }
 }

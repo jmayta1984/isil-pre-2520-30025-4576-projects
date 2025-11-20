@@ -16,6 +16,7 @@ struct ProductListView: View {
             switch viewModel.uiState.status {
             case .initial:
                 EmptyView()
+                
             case .loading:
                 ProgressView()
             case .success:
@@ -24,7 +25,9 @@ struct ProductListView: View {
                     LazyVGrid(
                         columns: [GridItem(.flexible()), GridItem(.flexible())]) {
                             ForEach (viewModel.uiState.products) { product in
-                                ProductCard(product: product)
+                                ProductCard(product: product) {
+                                    viewModel.toggleFavorite(product: product)
+                                }
                             }
                         }
                 }
