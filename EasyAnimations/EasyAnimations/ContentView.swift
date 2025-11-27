@@ -10,15 +10,18 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         TabView {
-            Tab("Animation", systemImage: "circle") {
+            Tab("Implicit", systemImage: "circle") {
                 ImplicitAnimation()
+            }
+            Tab("Explicit", systemImage: "rectangle") {
+                ExplicitAnimation()
             }
             
             Tab("Transition", systemImage: "rectangle") {
                 TransitionAnimation()
             }
             Tab("Infinite", systemImage: "arrow.2.circlepath.circle") {
-                
+                InfiniteAnimation()
             }
         }
     }
