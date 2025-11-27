@@ -17,7 +17,6 @@ struct TransitionAnimation: View {
             if show {
                 Rectangle()
                     .transition(.scale.combined(with: .opacity))
-                    .animation(.linear, value: show)
                     .frame(width: 100, height: 100)
             }
             Button {
