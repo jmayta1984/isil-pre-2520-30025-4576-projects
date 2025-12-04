@@ -11,6 +11,6 @@ class GoogleMapHelper {
     static let shared = GoogleMapHelper()
     
     private init () {
-        GMSServices.provideAPIKey("AIzaSyA-vQx2B0cAVRep0CLD-1CS-H2pOB0xxts")
+        GMSServices.provideAPIKey("YOUR API KEY HERE")
     }
 }
